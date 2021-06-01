@@ -1,0 +1,68 @@
+html {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    margin: 0px;
+    background-color: lightyellow;
+    display: flex;
+    justify-content: center;
+}
+
+.tutto {
+    position: absolute;
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* creazione della tabella */
+
+table, td {
+    border: 2.2px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    width: 50vh;
+    height: 50vh;
+}
+
+td {
+    width: 10vh;
+    height: 10vh;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0px;
+}
+
+#q1-1, #q1-2, #q1-3 {
+    border-top: 0px;
+}
+
+#q3-1, #q3-2, #q3-3 {
+    border-bottom: 0px;
+}
+
+#q1-1, #q2-1, #q3-1 {
+    border-left: 0px;
+}
+
+#q1-3, #q2-3, #q3-3 {
+    border-right: 0px;
+}
+
+/* creazione modalità */
+
+.mod {
+    margin-bottom: 7vh;
+}
+
+/* creazione punteggio */
+
+.punteggio {
+    margin-top: 7vh;
+}
