@@ -4,13 +4,29 @@ var daRicaricare = false;
 var monoGiocatore = false;
 var inizio = true;
 var tabella = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
-var punteggio = new Array(0, 0); // punteggio X e O rispettivamente
+var punteggio = new Array(0, 0, 0); // punteggio X, pari e O rispettivamente: X|parità|O
 
 const X = 1;
 const O = -1;
 const VOID = 0;
 
 document.addEventListener("click", function (event) {
+
+    // scelgo la modalità di gioco - questo if viene eseguito al primo click
+    if (inizio && (event.target.id === "p1" || event.target.id === "p2")) {
+        inizio = false;
+
+        if (event.target.id === "p1") {
+            monoGiocatore = true;
+            document.getElementById("mod").innerHTML = "giocatore singolo";
+        } else
+            document.getElementById("mod").innerHTML = "due giocatori";
+
+        document.getElementById("pX").innerHTML = document.getElementById("pP").innerHTML = document.getElementById("pO").innerHTML = "0";
+
+        resetta();
+
+    }
 
     // resetto se si clicca sul bottone ricarica e se la partita è da ricaricare
     if (daRicaricare && (event.target.id === 'ricarica' || event.target.id === 'q4'))
@@ -20,30 +36,27 @@ document.addEventListener("click", function (event) {
 
         if (turnoX(turno))
             tabella[parseInt(event.target.id[1])] = X; // aggiungi una X nella tabella
-
-        // if (monoGiocatore && !partitaFinita) { // mossa computer se la modalità è giocatore singolo
-        //     if (vincitore(tabella)[0] !== 0)
-        //         eseguiEsito(); 
-        //     else {
-        //         console.log("mossa PC");
-        //         tabella[mossaMigliore(tabella)] = O;
-        //         ++turno;
-        //     }
-        // }
         else
-            tabella[parseInt(event.target.id[1])] = O;
+            tabella[parseInt(event.target.id[1])] = O; // aggiungi una O nella tabella
 
         ++turno; // turno successivo
         disegna(tabella);
 
-        // CHI STA VINCENDO??
+        // mossa computer
+        if (monoGiocatore) {
+            tabella[mossaMigliore(tabella)] = O;
+            ++turno;
+            disegna(tabella);
+        }
 
+        // CHI STA VINCENDO??
         let esito = vincitore(tabella);
         partitaFinita = true; // temporaneo
 
         if (turno > 9 && esito === VOID) { // se i turni sono finiti e l'esito è pari
 
             console.log("X e O pari");
+            document.getElementById("pP").innerHTML = ++punteggio[1];
 
         } else if (esito === X) { // se ha vinto la X ...
 
@@ -55,41 +68,22 @@ document.addEventListener("click", function (event) {
 
             console.log("vince la O");
             // document.getElementById("q" + esito[1][0]).innerHTML = document.getElementById("q" + esito[1][1]).innerHTML = document.getElementById("q" + esito[1][2]).innerHTML = '<svg height="90%" width="90%"><circle cx="50%" cy="50%" r="30%" stroke="#1E88E5" stroke-width="4%" fill="none"/></svg>';
-            document.getElementById("pO").innerHTML = ++punteggio[1];
+            document.getElementById("pO").innerHTML = ++punteggio[2];
 
         } else partitaFinita = false;
-
-        // mossa computer
-        if (monoGiocatore) {
-            tabella[mossaMigliore(tabella)] = O;
-            ++turno;
-            disegna(tabella);
-        }
 
     }
 
     // rendi visibile il bottone di ricarica
-    if (partitaFinita) { 
+    if (partitaFinita) {
 
         document.getElementById("q4").innerHTML = '<svg style="cursor:pointer;" id="ricarica" height="90%" width="90%" viewBox="0 0 504.1 578.1"><defs><style>.cls-1, .cls-2 {fill: none;stroke: black;stroke-miterlimit: 10;stroke-width: 4%;}.cls-2{stroke-linecap: round;}</style></defs><title>riprova</title><path class="cls-1" d="M332.2,180.3" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M54.6,420.9c0-134.2,108.8-243,243-243" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M332.2,180.3c117.9,16.8,208.5,118.1,208.5,240.6" transform="translate(-45.6 -131.9)"/><line class="cls-2" x1="215.1" y1="9" x2="252.1" y2="46"/><line class="cls-2" x1="252.1" y1="46" x2="215.1" y2="82.9"/><path class="cls-1" d="M263.1,661.6" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M540.7,420.9C540.7,555.2,431.9,664,297.6,664" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M263.1,661.6C145.2,644.8,54.6,543.4,54.6,420.9" transform="translate(-45.6 -131.9)"/><line class="cls-2" x1="289" y1="569.1" x2="252.1" y2="532.1"/><line class="cls-2" x1="252.1" y1="532.1" x2="289" y2="495.1"/></svg>';
+
+        for (let i = 0; i < 9; ++i)
+            document.getElementById("q" + i).style = "pointer-events: none;";
+        document.getElementById("q4").style = "";
+
         daRicaricare = true;
-
-    }
-
-    // scelgo la modalità di gioco - questa funzione viene eseguita al primo click
-    if (inizio) {
-        inizio = false;
-
-        if (event.target.id === "q3") {
-            monoGiocatore = true;
-            document.getElementById("mod").innerHTML = "giocatore singolo"
-        } else
-            document.getElementById("mod").innerHTML = "due giocatori"
-
-        for (let i = 0; i < 9; i++)
-            document.getElementById("q" + i).style = "";
-
-        resetta();
 
     }
 
@@ -128,9 +122,8 @@ function disegna(tabella) {
 
 function resetta() { // resetta la tavola e l'ambiente di gioco
 
-    for (i = 0; i < 9; ++i) {
-        document.getElementById("q" + i).innerHTML = "";
-    }
+    for (let i = 0; i < 9; ++i)
+        document.getElementById("q" + i).innerHTML = document.getElementById("q" + i).style = "";
 
     partitaFinita = false;
     daRicaricare = false;
@@ -187,7 +180,7 @@ function mossaMigliore(tabella) {
         if (tabella[i] === 0) {
 
             tabella[i] = -1;
-            let valoreMossa = -minimax(tabella, -1);
+            let valoreMossa = -minimax(tabella, 1);
             tabella[i] = 0;
 
             if (valoreMossa > punteggioMossa) {
