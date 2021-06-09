@@ -18,9 +18,9 @@ document.addEventListener("click", function (event) {
 
         if (event.target.id === "p1") {
             monoGiocatore = true;
-            document.getElementById("mod").innerHTML = "giocatore singolo";
+            document.getElementById("mod").innerHTML = "1 giocatore";
         } else
-            document.getElementById("mod").innerHTML = "due giocatori";
+            document.getElementById("mod").innerHTML = "2 giocatori";
 
         document.getElementById("pX").innerHTML = document.getElementById("pP").innerHTML = document.getElementById("pO").innerHTML = "0";
 
@@ -29,8 +29,13 @@ document.addEventListener("click", function (event) {
     }
 
     // resetto se si clicca sul bottone ricarica e se la partita è da ricaricare
-    if (daRicaricare && (event.target.id === 'ricarica' || event.target.id === 'q4'))
+    if (daRicaricare && (event.target.id === 'ricarica' || event.target.id === 'q4')) {
+        
+        document.getElementById("mod").innerHTML = (monoGiocatore) ? "1 giocatore" : "2 giocatori";
         resetta();
+
+    }
+        
 
     if (event.target.id[0] === 'q' && cellaLibera(tabella, parseInt(event.target.id[1]))) { // se è una cella della tabella e se la cella è libera ...
 
@@ -57,18 +62,20 @@ document.addEventListener("click", function (event) {
 
             console.log("X e O pari");
             document.getElementById("pP").innerHTML = ++punteggio[1];
+            document.getElementById("mod").innerHTML = "pari";
+
 
         } else if (esito === X) { // se ha vinto la X ...
 
             console.log("vince la X");
-            // document.getElementById("q" + esito[1][0]).innerHTML = document.getElementById("q" + esito[1][1]).innerHTML = document.getElementById("q" + esito[1][2]).innerHTML = '<svg fill="#43A047" width="85%" height="85%" viewBox="0 0 768 768"><path d="M751,31.9h0M743.5,0a24.5,24.5,0,0,0-17.3,7.2l-719,719a24.5,24.5,0,1,0,34.6,34.6l719-719A24.5,24.5,0,0,0,743.5,0Z" transform="translate(0 0)"/><path d="M24.5,0A24.5,24.5,0,0,0,7.2,41.8l719,719a24.5,24.5,0,0,0,34.6-34.6L41.8,7.2A24.5,24.5,0,0,0,24.5,0Z" transform="translate(0 0)"/></svg>';
             document.getElementById("pX").innerHTML = ++punteggio[0];
+            document.getElementById("mod").innerHTML = "vince X";
 
         } else if (esito === O) { // se ha vinto la O ...
 
             console.log("vince la O");
-            // document.getElementById("q" + esito[1][0]).innerHTML = document.getElementById("q" + esito[1][1]).innerHTML = document.getElementById("q" + esito[1][2]).innerHTML = '<svg height="90%" width="90%"><circle cx="50%" cy="50%" r="30%" stroke="#1E88E5" stroke-width="4%" fill="none"/></svg>';
             document.getElementById("pO").innerHTML = ++punteggio[2];
+            document.getElementById("mod").innerHTML = "vince O";
 
         } else partitaFinita = false;
 
@@ -77,7 +84,7 @@ document.addEventListener("click", function (event) {
     // rendi visibile il bottone di ricarica
     if (partitaFinita) {
 
-        document.getElementById("q4").innerHTML = '<svg style="cursor:pointer;" id="ricarica" height="90%" width="90%" viewBox="0 0 504.1 578.1"><defs><style>.cls-1, .cls-2 {fill: none;stroke: black;stroke-miterlimit: 10;stroke-width: 4%;}.cls-2{stroke-linecap: round;}</style></defs><title>riprova</title><path class="cls-1" d="M332.2,180.3" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M54.6,420.9c0-134.2,108.8-243,243-243" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M332.2,180.3c117.9,16.8,208.5,118.1,208.5,240.6" transform="translate(-45.6 -131.9)"/><line class="cls-2" x1="215.1" y1="9" x2="252.1" y2="46"/><line class="cls-2" x1="252.1" y1="46" x2="215.1" y2="82.9"/><path class="cls-1" d="M263.1,661.6" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M540.7,420.9C540.7,555.2,431.9,664,297.6,664" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M263.1,661.6C145.2,644.8,54.6,543.4,54.6,420.9" transform="translate(-45.6 -131.9)"/><line class="cls-2" x1="289" y1="569.1" x2="252.1" y2="532.1"/><line class="cls-2" x1="252.1" y1="532.1" x2="289" y2="495.1"/></svg>';
+        document.getElementById("q4").innerHTML = '<svg class="ricarica" style="cursor:pointer;" id="ricarica" height="90%" width="90%" viewBox="0 0 504.1 578.1"><defs><style>.cls-1, .cls-2 {fill: none;stroke: black;stroke-miterlimit: 10;stroke-width: 4%;}.cls-2{stroke-linecap: round;}</style></defs><title>riprova</title><path class="cls-1" d="M332.2,180.3" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M54.6,420.9c0-134.2,108.8-243,243-243" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M332.2,180.3c117.9,16.8,208.5,118.1,208.5,240.6" transform="translate(-45.6 -131.9)"/><line class="cls-2" x1="215.1" y1="9" x2="252.1" y2="46"/><line class="cls-2" x1="252.1" y1="46" x2="215.1" y2="82.9"/><path class="cls-1" d="M263.1,661.6" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M540.7,420.9C540.7,555.2,431.9,664,297.6,664" transform="translate(-45.6 -131.9)"/><path class="cls-2" d="M263.1,661.6C145.2,644.8,54.6,543.4,54.6,420.9" transform="translate(-45.6 -131.9)"/><line class="cls-2" x1="289" y1="569.1" x2="252.1" y2="532.1"/><line class="cls-2" x1="252.1" y1="532.1" x2="289" y2="495.1"/></svg>';
 
         for (let i = 0; i < 9; ++i)
             document.getElementById("q" + i).style = "pointer-events: none;";
