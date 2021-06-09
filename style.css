@@ -1,5 +1,5 @@
 html {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -55,6 +55,15 @@ td {
     border-right: 0px;
 }
 
+.ricarica {
+    transform: rotate("0deg");
+    transition: transform 1s;
+}
+
+.ricarica:hover {
+    transform: rotate("360deg");
+}
+
 /* creazione modalità */
 
 .mod {
@@ -65,4 +74,8 @@ td {
 
 .punteggio {
     margin-top: 7vh;
+}
+
+.scritta {
+    font-size: 3vh;
 }
